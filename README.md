@@ -47,7 +47,7 @@ This repository contains the API for the AdventureWorks2019 database, built with
 Contributions to this project are welcome. Please ensure you follow the coding standards and guidelines of the project.
 
 ## License
-[LICENSE]
+- [LICENSE](LICENSE)
 
 ## Contact
 - **Email:** [aezequiel56@gmail.com]
