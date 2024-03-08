@@ -17,7 +17,8 @@ This repository contains the API for the AdventureWorks2019 database, built with
 3. **Navigate to the Project Directory**: After cloning, navigate to the project directory using your command line tool.
 
 4. **Build the Project**:
-    ```dotnet build
+    ```
+    dotnet build
     ```
 
 5. **Install Necessary Libraries**: If you don't have the required libraries, install them using the following commands:
