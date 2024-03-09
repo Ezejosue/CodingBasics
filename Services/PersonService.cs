@@ -26,12 +26,12 @@ public class PersonService
     /// </summary>
     /// <param name="pageNumber">The page number of the pagination.</param>
     /// <param name="pageSize">The number of items per page.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains the list of <see cref="Person"/>.</returns>
-    public async Task<List<Person>> GetPersonsAsync(int pageNumber, int pageSize)
+    /// <returns>A task that represents the asynchronous operation. The task result contains the list of <see cref="Employee"/>.</returns>
+    public async Task<List<VEmployee>> GetPersonsAsync(int pageNumber, int pageSize)
     {
         try
         {
-            return await _context.People
+            return await _context.VEmployees
                                  .Skip((pageNumber - 1) * pageSize)
                                  .Take(pageSize)
                                  .ToListAsync();
@@ -46,27 +46,36 @@ public class PersonService
     /// Searches for persons by their first name.
     /// </summary>
     /// <param name="firstName">The first name to search for.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains a list of <see cref="Person"/> matching the provided first name.</returns>
-    public async Task<List<Person>> GetPersonByNameAsync(string firstName)
+    /// <returns>A task that represents the asynchronous operation. The task result contains a list of <see cref="Employee"/> matching the provided first name.</returns>
+    public async Task<List<EmployeeInfoDto>> GetPersonByNameAsync(string firstName)
     {
         try
         {
-            var person = await _context.People
-                                 .Where(p => p.FirstName.Contains(firstName)).ToListAsync();
+            firstName = firstName.ToLower();
+            var query = (from e in _context.Employees
+                         join p in _context.People on e.BusinessEntityId equals p.BusinessEntityId
+                         where (p.FirstName.ToLower() + " " + p.LastName.ToLower()).Contains(firstName)
+                         select new EmployeeInfoDto
+                         {
+                             BusinessEntityID = e.BusinessEntityId,
+                             EmployeeName = p.FirstName + " " + p.LastName,
+                             PersonType = p.PersonType,
+                             Gender = e.Gender,
+                             DateOfBirth = e.BirthDate.ToString(),
+                             MaritalStatus = e.MaritalStatus,
+                             JobTitle = e.JobTitle,
+                             VacationHours = e.VacationHours,
+                             HireDate = e.HireDate.ToString()
+                         });
 
-            if (person == null)
-            {
-                throw new ApplicationException("Person not found");
-            }
-            else
-            {
-                return person;
 
-            }
+            return await query.ToListAsync();
         }
         catch (Exception ex)
         {
-            throw new ApplicationException("An error occurred while retrieving person: " + ex.Message);
+            // Handle the exception here
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            return new List<EmployeeInfoDto>(); // Return an empty list or handle the error accordingly
         }
     }
 
@@ -74,32 +83,43 @@ public class PersonService
     /// Retrieves persons filtered by their type with pagination.
     /// </summary>
     /// <param name="personType">The person type to filter by.</param>
-    /// <param name="pageNumber">The page number for pagination.</param>
-    /// <param name="pageSize">The number of items per page.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains a paginated list of <see cref="Person"/> of the specified type.</returns>
-    public async Task<List<Person>> GetPersonByPersonTypeAsync(string personType, int pageNumber, int pageSize)
+    /// <returns>A task that represents the asynchronous operation. The task result contains a paginated list of <see cref="Employee"/> of the specified type.</returns>
+    public async Task<List<EmployeeInfoDto>> GetPersonByPersonTypeAsync(string personType)
     {
         try
         {
-            var person = await _context.People
-                                 .Where(p => p.PersonType == personType)
-                                 .Skip((pageNumber - 1) * pageSize)
-                                 .Take(pageSize)
-                                 .ToListAsync();
+            var employees = await _context.Employees
+                                          .Join(_context.People,
+                                                e => e.BusinessEntityId,
+                                                p => p.BusinessEntityId,
+                                                (e, p) => new { e, p })
+                                          .Where(ep => ep.p.PersonType == personType)
+                                          .Select(ep => new EmployeeInfoDto
+                                          {
+                                              BusinessEntityID = ep.e.BusinessEntityId,
+                                              EmployeeName = ep.p.FirstName + " " + ep.p.LastName,
+                                              PersonType = ep.p.PersonType,
+                                              Gender = ep.e.Gender,
+                                              DateOfBirth = ep.e.BirthDate.ToString(),
+                                              MaritalStatus = ep.e.MaritalStatus,
+                                              JobTitle = ep.e.JobTitle,
+                                              VacationHours = ep.e.VacationHours,
+                                              HireDate = ep.e.HireDate.ToString()
+                                          })
+                                          .ToListAsync();
 
-            if (person == null)
+            if (employees == null)
             {
-                throw new ApplicationException("Person not found");
+                throw new ApplicationException("Employee not found");
             }
             else
             {
-                return person;
-
+                return employees;
             }
         }
         catch (Exception ex)
         {
-            throw new ApplicationException("An error occurred while retrieving person: " + ex.Message);
+            throw new ApplicationException("An error occurred while retrieving employees: " + ex.Message);
         }
     }
 
@@ -108,28 +128,42 @@ public class PersonService
     /// </summary>
     /// <param name="firstName">The first name to search for.</param>
     /// <param name="personType">The person type to filter by.</param>
-    /// <returns>A task that represents the asynchronous operation. The task result contains a list of <see cref="Person"/> matching both the provided first name and person type.</returns>
-    public async Task<List<Person>> GetPersonByNameAndTypeAsync(string firstName, string personType)
+    /// <returns>A task that represents the asynchronous operation. The task result contains a list of <see cref="Employee"/> matching both the provided first name and person type.</returns>
+    public async Task<List<EmployeeInfoDto>> GetPersonByNameAndTypeAsync(string firstName, string personType)
     {
         try
         {
-            var person = await _context.People
-                                 .Where(p => p.FirstName.Contains(firstName) && p.PersonType == personType)
-                                 .ToListAsync();
+            var employees = await _context.Employees
+                                          .Join(_context.People,
+                                                e => e.BusinessEntityId,
+                                                p => p.BusinessEntityId,
+                                                (e, p) => new { e, p })
+                                          .Where(ep => ep.p.FirstName.Contains(firstName) && ep.p.PersonType == personType)
+                                          .Select(ep => new EmployeeInfoDto
+                                          {
+                                              BusinessEntityID = ep.e.BusinessEntityId,
+                                              EmployeeName = ep.p.FirstName + " " + ep.p.LastName,
+                                              Gender = ep.e.Gender,
+                                              DateOfBirth = ep.e.BirthDate.ToString(),
+                                              MaritalStatus = ep.e.MaritalStatus,
+                                              JobTitle = ep.e.JobTitle,
+                                              VacationHours = ep.e.VacationHours,
+                                              HireDate = ep.e.HireDate.ToString()
+                                          })
+                                          .ToListAsync();
 
-            if (person == null)
+            if (employees == null)
             {
-                throw new ApplicationException("Person not found");
+                throw new ApplicationException("Employee not found");
             }
             else
             {
-                return person;
-
+                return employees;
             }
         }
         catch (Exception ex)
         {
-            throw new ApplicationException("An error occurred while retrieving person: " + ex.Message);
+            throw new ApplicationException("An error occurred while retrieving employees: " + ex.Message);
         }
     }
 

@@ -29,7 +29,7 @@ public class PersonController : ControllerBase
     /// <param name="pageSize">The size of each page.</param>
     /// <returns>A list of persons in the specified page range.</returns>
     [HttpGet]
-    public async Task<ActionResult<List<Person>>> GetPersonsAsync(int pageNumber, int pageSize)
+    public async Task<ActionResult<List<VEmployee>>> GetPersonsAsync(int pageNumber, int pageSize)
     {
         try
         {
@@ -49,7 +49,7 @@ public class PersonController : ControllerBase
     /// <param name="firstName">The first name to filter persons by.</param>
     /// <returns>A list of persons matching the provided first name.</returns>
     [HttpGet("{firstName}")]
-    public async Task<ActionResult<List<Person>>> GetPersonByNameAsync(string firstName)
+    public async Task<ActionResult<List<EmployeeInfoDto>>> GetPersonByNameAsync(string firstName)
     {
         try
         {
@@ -67,15 +67,13 @@ public class PersonController : ControllerBase
     /// Gets a paginated list of persons by their type.
     /// </summary>
     /// <param name="personType">The type of persons to filter by.</param>
-    /// <param name="pageNumber">The current page number for pagination.</param>
-    /// <param name="pageSize">The size of each page.</param>
     /// <returns>A list of persons matching the provided type in the specified page range.</returns>
     [HttpGet("personType/{personType}")]
-    public async Task<ActionResult<List<Person>>> GetPersonByPersonTypeAsync(string personType, int pageNumber, int pageSize)
+    public async Task<ActionResult<List<EmployeeInfoDto>>> GetPersonByPersonTypeAsync(string personType)
     {
         try
         {
-            var person = await _personService.GetPersonByPersonTypeAsync(personType, pageNumber, pageSize);
+            var person = await _personService.GetPersonByPersonTypeAsync(personType);
             return Ok(person);
         }
         catch (ApplicationException ex)
@@ -92,7 +90,7 @@ public class PersonController : ControllerBase
     /// <param name="personType">The type of persons to filter by.</param>
     /// <returns>A list of persons matching both the provided first name and type.</returns>
     [HttpGet("personTypeAndName")]
-    public async Task<ActionResult<List<Person>>> GetPersonByPersonNameAndTypeAsync(string firstName, string personType)
+    public async Task<ActionResult<List<EmployeeInfoDto>>> GetPersonByPersonNameAndTypeAsync(string firstName, string personType)
     {
         try
         {
