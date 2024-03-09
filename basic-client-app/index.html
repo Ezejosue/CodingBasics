@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="js/Services/Employee.js"></script>
+    <script src="../js/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Entity API</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Minimal API</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            People
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#">All Employees</a></li>
+                            <li><a class="dropdown-item" href="html/employeeName.html">Person by name</a></li>
+                            <li><a class="dropdown-item" href="html/employeeType.html">Person by type</a></li>
+                            <li><a class="dropdown-item" href="html/employeeTypeAndName.html">Person by name and
+                                    type</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Products
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="html/products.html">All Products</a></li>
+                            <li><a class="dropdown-item" href="html/productName.html">Name Products</a></li>
+                            <li><a class="dropdown-item" href="html/productCategory.html">Category Products</a></li>
+
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            Sales
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="html/sales.html">All Sale</a></li>
+                            <li><a class="dropdown-item" href="html/SalePersonName.html">Sales By Person</a></li>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="card">
+                <div class="card-body d-flex justify-content-center">
+                    <h5>Employees</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 mb-4">
+            <form>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <span class="input-group-text">Page Number</span>
+                            <input type="number" aria-label="PageNumber" class="form-control" id="pageNumber" min="1">
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <span class="input-group-text">Page size</span>
+                            <input type="number" aria-label="PageSize" class="form-control" id="pageSize" min="1">
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-12">
+                        <button type="button" class="btn btn-info w-50" onclick="getAllEmployees()">Search</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <table class="table" id="people-table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">First Name</th>
+                        <th scope="col">Last Name</th>
+                        <th scope="col">Job Title</th>
+                        <th scope="col">Phone Number</th>
+                        <th scope="col">City</th>
+                        <th scope="col">State Name</th>
+                        <th scope="col">Country Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
