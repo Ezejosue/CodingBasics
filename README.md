@@ -42,6 +42,7 @@ This repository contains the API for the AdventureWorks2019 database, built with
 2. **Application Configuration**: Configuration settings, including the port to run the application on, can be found and modified in the `CodingBasics.http` file.
 
 3. **Accessing API Documentation**: The API documentation is available through Swagger at `http://localhost:5000/swagger` (assuming the default port 5000 is used).
+4. To view the API views, you should navigate to the basic-client-app folder, and before testing the views, you must have the API running with the aforementioned instructions.
 
 ## Contribution
 Contributions to this project are welcome. Please ensure you follow the coding standards and guidelines of the project.
