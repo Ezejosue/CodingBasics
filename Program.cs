@@ -16,6 +16,14 @@ builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<SaleService>();
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        builder =>
+        {
+            builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
 
@@ -29,6 +37,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 app.UseHttpsRedirection();
 app.MapControllers();
+app.UseCors();
 
 app.MapGet("/", () => "Hello World!");
 

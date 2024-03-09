@@ -143,6 +143,7 @@ public class PersonService
                                           {
                                               BusinessEntityID = ep.e.BusinessEntityId,
                                               EmployeeName = ep.p.FirstName + " " + ep.p.LastName,
+                                              PersonType = ep.p.PersonType,
                                               Gender = ep.e.Gender,
                                               DateOfBirth = ep.e.BirthDate.ToString(),
                                               MaritalStatus = ep.e.MaritalStatus,
